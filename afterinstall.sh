@@ -1,10 +1,10 @@
 #! /bin/bash
 #
-# $Id: afterinstall.sh 56 2014-12-30 19:22:24 Angel $
+# $Id: afterinstall.sh 57 2014-12-30 19:22:24 Angel $
 ##
 # Angel's script for automatic installation of Gnome and Unity desktots and others in Ubuntu Studio 14.04.1 LTS
 #
-#v(b.1.25)
+#v(b.2.01)
 #
 
 #
@@ -25,16 +25,53 @@
 #
 
 
+#Variables creation
+ostype=`uname -s`
+osdist=`uname -n`
+
+# Test if is running in Linux Ubuntu Studio
+if test "$ostype" != "Linux" && test "$osdist" != "ubuntu-studio" ; then
+  echo "Ubuntu Studio not detected."
+  echo " _-====================================================-_ "
+  echo " | This script was made to work only with ubuntu studio | "
+  echo " \======================================================/ "
+  exit 1
+fi
+
+
+
+if `zenity --question --title="Install Unity" --text="Do you want to install the Unity desktop?"`
+	then	install_unity=true
+	else	install_unity=false
+fi
+
+
+if `zenity --question --title="Configure Unity greeter" --text="Do you want to use the unity greeter instead of the ubuntu studio one"`
+	then	install_unity_greeter=true
+	else	install_unity_greeter=false
+fi
+
+if `zenity --question --title="Install GNOME" --text="Do you want to install the GNOME desktop?"`
+	then	install_gnome=true
+	else	install_gnome=false
+fi
+
+
+
+
+
 
 # Añadir repositorios de Ubuntu (partners, universe y multiverse)
 
-zenity   --warning --text=" ACTIVE REPOSITORIOS DE LA PRIMERA Y SEGUNDA PESTAÑA "
+zenity   --warning --text=" ACTIVE REPOSITORIOS DE LA PRIMERA Y SEGUNDA PESTAÑA \n Canonical partners, Universe and Multiverse"
 
 ####sudo software-properties-gtk
-###sudo /usr/bin/python /usr/bin/software-properties-gtk --open-tab=2
+###sudo /usr/bin/python /usr/bin/software-properties-gtk --open-tab=1
 ###sudo apt-get update
 
-if `sudo /usr/bin/python /usr/bin/software-properties-gtk --open-tab=2`
+
+#this could be changed by "software-properties-gtk --open-tab=1"
+if `sudo /usr/bin/python /usr/bin/software-properties-gtk --open-tab=1`
 	then
 		echo "Done"
 	else
@@ -43,7 +80,7 @@ if `sudo /usr/bin/python /usr/bin/software-properties-gtk --open-tab=2`
 		sudo software-properties-gtk --open-tab=1
 fi
 
-	# ORDEN
+	# ORDEN DE INSTALACION
 #	unity
 #	unity-greeter
 #	ubuntu-desktop
@@ -51,49 +88,56 @@ fi
 #	gnome
 #	gnome-shell
 
-
-sudo apt-get install -y unity #instalar  unity
-sudo apt-get install -y unity-greeter #instala el greeter de unity
-sudo apt-get install -y ubuntu-desktop #instalar ubuntu-desktop
-sudo unity-greeter
-
-zenity   --warning --text=" Seleccione Lightdm si se le pide!!! "
-sudo apt install gnome-session-flashback
-####sudo apt-get install gnome #instala gnome
-###sudo apt-get install gnome-shell
-###sudo apt-get install gnome-shell-extensions
-
-#instalacion avanzada de gnome
-if `zenity --question --text="Instlar Repositorios especificos de Gnome 3/ GNOME Shell?"`
+if [ "$install_unity" = true ]
 	then
-		sudo add-apt-repository ppa:ricotz/testing -y
-		sudo add-apt-repository ppa:gnome3-team/gnome3 -y
-		sudo add-apt-repository ppa:gnome3-team/gnome3-staging -y
-		sudo apt update
-		sudo apt-get install -y gnome
-		sudo apt-get install -y gnome-shell
-		sudo apt-get install -y gnome-shell-extensions
-		sudo apt install -y gnome-tweak-tool
-	else
-		sudo apt update
-		sudo apt-get install -y gnome
-		sudo apt-get install -y gnome-shell
-		sudo apt-get install -y gnome-shell-extensions
-		sudo apt install gnome-tweak-tool -y
+		sudo apt-get install -y unity #instalar  unity
+		sudo apt-get install -y unity-greeter #instala el greeter de unity
+		sudo apt-get install -y ubuntu-desktop #instalar ubuntu-desktop
+		sudo unity-greeter
+fi
+if [ "$install_gnome" = true ]
+	then
+		zenity   --warning --text=" Seleccione Lightdm si se le pide!!! "
+		sudo apt install gnome-session-flashback
+			####sudo apt-get install gnome #instala gnome
+			###sudo apt-get install gnome-shell
+			###sudo apt-get install gnome-shell-extensions
+
+		#instalacion avanzada de gnome
+		if `zenity --question --text="Instlar Repositorios especificos de Gnome 3/ GNOME Shell?\nNo recomendado, funciona igualmente."`
+			then
+				###sudo add-apt-repository ppa:ricotz/testing -y
+				###sudo add-apt-repository ppa:gnome3-team/gnome3 -y
+				###sudo add-apt-repository ppa:gnome3-team/gnome3-staging -y
+
+				sudo add-apt-repository "deb http://ppa.launchpad.net/gnome3-team/gnome3/ubuntu trusty main"
+				sudo add-apt-repository "deb-src http://ppa.launchpad.net/gnome3-team/gnome3/ubuntu trusty main"
+				sudo apt update
+				sudo apt-get install -y gnome
+				sudo apt-get install -y gnome-shell
+				sudo apt-get install -y gnome-shell-extensions
+				sudo apt install -y gnome-tweak-tool
+			else
+				sudo apt update
+				sudo apt-get install -y gnome
+				sudo apt-get install -y gnome-shell
+				sudo apt-get install -y gnome-shell-extensions
+				sudo apt install gnome-tweak-tool -y
+		fi
 fi
 
 
+if [ "$install_unity_greeter" = true ]
+	then
+		# copia archivo de configuracion necesario para el funcionamiento de unity-greeter, NECESARIO!!
+		sudo cp unity-greeter.conf /etc/lightdm/unity-greeter.conf
 
+		###	# crea backup del archivo de configuracion de lightdm de ubuntu studio, "just in case" para posible recuperacion
+		###sudo cp /etc/lightdm/lightdm.conf.d/10-ubuntustudio.conf /etc/lightdm/lightdm.conf.d/10-ubuntustudio.conf.bak
+		### 
 
-	# copia archivo de configuracion necesario para el funcionamiento de unity-greeter, NECESARIO!!
-sudo cp files/conf/unity-greeter.conf /etc/lightdm/unity-greeter.conf
-
-###	# crea backup del archivo de configuracion de lightdm de ubuntu studio, "just in case" para posible recuperacion
-###sudo cp /etc/lightdm/lightdm.conf.d/10-ubuntustudio.conf /etc/lightdm/lightdm.conf.d/10-ubuntustudio.conf.bak
-### 
-
-sudo cp -b files/conf/10-ubuntustudio.conf /etc/lightdm/lightdm.conf.d/10-ubuntustudio.conf #copia archivo de configuracion nuevo y crea backup, lo cual hace inecesario el anterior comando
-
+		sudo cp -b 10-ubuntustudio.conf /etc/lightdm/lightdm.conf.d/10-ubuntustudio.conf #copia archivo de configuracion nuevo y crea backup, lo cual hace inecesario el anterior comando
+fi
 
 
 
