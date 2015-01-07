@@ -14,7 +14,7 @@
 # in Ubuntu Studio 14.04.1 LTS This file is free software;
 # you can redistribute it and/or modify it under the terms of the GNU
 # General Public License (GPL) as published by the Free Software
-# Foundation, in version 2 as it comes in the "License_en_US.rtf" file
+# Foundation, in version 2 as it comes in the "LICENSE" file
 # in the root folder of the script package. This script is distributed
 # in the hope that it will be useful, but WITHOUT ANY WARRANTY of any kind.
 #
