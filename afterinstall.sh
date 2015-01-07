@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-# $Id: afterinstall.sh 55 2014-12-30 19:22:24 Angel $
+# $Id: afterinstall.sh 56 2014-12-30 19:22:24 Angel $
 ##
 # Angel's script for automatic installation of Gnome and Unity desktots and others in Ubuntu Studio 14.04.1 LTS
 #
@@ -86,13 +86,13 @@ fi
 
 
 	# copia archivo de configuracion necesario para el funcionamiento de unity-greeter, NECESARIO!!
-sudo cp unity-greeter.conf /etc/lightdm/unity-greeter.conf
+sudo cp files/conf/unity-greeter.conf /etc/lightdm/unity-greeter.conf
 
 ###	# crea backup del archivo de configuracion de lightdm de ubuntu studio, "just in case" para posible recuperacion
 ###sudo cp /etc/lightdm/lightdm.conf.d/10-ubuntustudio.conf /etc/lightdm/lightdm.conf.d/10-ubuntustudio.conf.bak
 ### 
 
-sudo cp -b 10-ubuntustudio.conf /etc/lightdm/lightdm.conf.d/10-ubuntustudio.conf #copia archivo de configuracion nuevo y crea backup, lo cual hace inecesario el anterior comando
+sudo cp -b files/conf/10-ubuntustudio.conf /etc/lightdm/lightdm.conf.d/10-ubuntustudio.conf #copia archivo de configuracion nuevo y crea backup, lo cual hace inecesario el anterior comando
 
 
 
