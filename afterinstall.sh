@@ -1,10 +1,10 @@
 #! /bin/bash
 #
-# $Id: afterinstall.sh 56 2014-12-30 19:22:24 Angel $
+# $Id: afterinstall.sh 57 2014-12-30 19:22:24 Angel $
 ##
 # Angel's script for automatic installation of Gnome and Unity desktots and others in Ubuntu Studio 14.04.1 LTS
 #
-#v(b.1.25)
+#v(b.2.01)
 #
 
 #
@@ -25,16 +25,37 @@
 #
 
 
+#Variables creation
+ostype=`uname -s`
+osdist=`uname -n`
+
+install_unity=`zenity --question --title="Install Unity" --text="Do you want to install the Unity desktop?"`
+
+install_unity_greeter=`zenity --question --title="Configure Unity greeter" --text="Do you want to use the unity greeter instead of the ubuntu studio one"`
+
+install_gnome=`zenity --question --title="Install GNOME" --text="Do you want to install the GNOME desktop?"`
+
+# Test if is running in Linux Ubuntu Studio
+if test "$ostype" != "Linux" && test "$osdist" != "ubuntu-studio" ; then
+  echo "Ubuntu Studio not detected."
+  echo "This script was made to work only with ubuntu studio"
+  exit 1
+fi
+
+
+
 
 # Añadir repositorios de Ubuntu (partners, universe y multiverse)
 
-zenity   --warning --text=" ACTIVE REPOSITORIOS DE LA PRIMERA Y SEGUNDA PESTAÑA "
+zenity   --warning --text=" ACTIVE REPOSITORIOS DE LA PRIMERA Y SEGUNDA PESTAÑA \n Canonical partners, Universe and Multiverse"
 
 ####sudo software-properties-gtk
-###sudo /usr/bin/python /usr/bin/software-properties-gtk --open-tab=2
+###sudo /usr/bin/python /usr/bin/software-properties-gtk --open-tab=1
 ###sudo apt-get update
 
-if `sudo /usr/bin/python /usr/bin/software-properties-gtk --open-tab=2`
+
+#this could be changed by "software-properties-gtk --open-tab=1"
+if `sudo /usr/bin/python /usr/bin/software-properties-gtk --open-tab=1`
 	then
 		echo "Done"
 	else
@@ -43,7 +64,7 @@ if `sudo /usr/bin/python /usr/bin/software-properties-gtk --open-tab=2`
 		sudo software-properties-gtk --open-tab=1
 fi
 
-	# ORDEN
+	# ORDEN DE INSTALACION
 #	unity
 #	unity-greeter
 #	ubuntu-desktop
@@ -86,13 +107,13 @@ fi
 
 
 	# copia archivo de configuracion necesario para el funcionamiento de unity-greeter, NECESARIO!!
-sudo cp files/conf/unity-greeter.conf /etc/lightdm/unity-greeter.conf
+sudo cp unity-greeter.conf /etc/lightdm/unity-greeter.conf
 
 ###	# crea backup del archivo de configuracion de lightdm de ubuntu studio, "just in case" para posible recuperacion
 ###sudo cp /etc/lightdm/lightdm.conf.d/10-ubuntustudio.conf /etc/lightdm/lightdm.conf.d/10-ubuntustudio.conf.bak
 ### 
 
-sudo cp -b files/conf/10-ubuntustudio.conf /etc/lightdm/lightdm.conf.d/10-ubuntustudio.conf #copia archivo de configuracion nuevo y crea backup, lo cual hace inecesario el anterior comando
+sudo cp -b 10-ubuntustudio.conf /etc/lightdm/lightdm.conf.d/10-ubuntustudio.conf #copia archivo de configuracion nuevo y crea backup, lo cual hace inecesario el anterior comando
 
 
 
