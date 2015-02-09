@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-# $Id: afterinstall.sh 57 2014-12-30 19:22:24 Angel $
+# $Id: afterinstall.sh 61 2015-14-09 15:14:59 Angel $
 ##
 # Angel's script for automatic installation of Gnome and Unity desktots and others in Ubuntu Studio 14.04.1 LTS
 #
@@ -29,14 +29,25 @@ if  [ $(whoami) == "root" -a $(uname -s) == "Linux" -a $(uname -n) == "ubuntu-st
 	
 
 	if `zenity --question --title="Install Unity" --text="Do you want to install the Unity desktop?"`
-		then	install_unity=true
-		else	install_unity=false
+		then
+			install_unity=true
+		else
+			install_unity=false
 	fi
 
 
 	if `zenity --question --title="Configure Unity greeter" --text="Do you want to use the unity greeter instead of the ubuntu studio one"`
-		then	install_unity_greeter=true
-		else	install_unity_greeter=false
+		then
+			install_unity_greeter=true
+		else
+			install_unity_greeter=false
+	fi
+
+	if `zenity --question --title="Install GNOME" --text="Do you want to install the GNOME desktop?"`
+		then
+			install_gnome=true
+		else
+			install_gnome=false
 	fi
 
 	if `zenity --question --title="Install GNOME" --text="Do you want to install the GNOME desktop?"`
