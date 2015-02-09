@@ -8,7 +8,7 @@ Angel's script for automatic installation of Gnome and Unity desktots and others
 v(b.2.01)
 
 
-Copyright (C) 20014 Angel Garcia
+Copyright (C) 2014-2015 Angel Garcia
 
 This file is a script to install Gnome, Unity and some .deb packages
 in Ubuntu Studio 14.04.1 LTS This file is free software;
