@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-# $Id: afterinstall.sh 61 2015-14-09 15:14:59 Angel $
+# $Id: afterinstall.sh 66 2015-14-09 16:02:59 Angel $
 ##
 # Angel's script for automatic installation of Gnome and Unity desktots and others in Ubuntu Studio 14.04.1 LTS
 #
