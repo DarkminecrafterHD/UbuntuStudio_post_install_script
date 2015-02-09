@@ -24,7 +24,7 @@
 # "###" means parts of code disabled by default becase unused or other reasons
 #
 
-if ! [ $(whoami) == "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-studio" ] # Test if is running in Linux Ubuntu Studio and root
+if ! [ $(whoami) != "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-studio" ] # Test if is running in Linux Ubuntu Studio and root
 	then
 	
 
