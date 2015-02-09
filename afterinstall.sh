@@ -24,7 +24,7 @@
 # "###" means parts of code disabled by default becase unused or other reasons
 #
 
-if ! [ $(whoami) != "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-studio" ] # Test if is running in Linux Ubuntu Studio and root
+if  [ $(whoami) == "root" -a $(uname -s) == "Linux" -a $(uname -n) == "ubuntu-studio" ] # Test if is running in Linux Ubuntu Studio and root
 	then
 	
 
@@ -238,14 +238,14 @@ if ! [ $(whoami) != "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-s
 	zenity --info --text="Instalacion concluida"
 	
 	else
-		if [ $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-studio" ]
+		if [ $(uname -s) != "Linux" -a $(uname -n) != "ubuntu-studio" ]
 			then
 				echo " _-====================================================-_ "
 				echo " | This script was made to work only with ubuntu studio | "
 				echo " \======================================================/ "
 			else
 			
-				if ! [ $(whoami) == "root" ]
+				if  [ $(whoami) != "root" ]
 					then
 						echo "You should run it as root"
 						sudo 'sh afterinstall.sh'
