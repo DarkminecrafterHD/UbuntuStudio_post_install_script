@@ -24,30 +24,19 @@
 # "###" means parts of code disabled by default becase unused or other reasons
 #
 
-if  [ $(whoami) == "root" -a $(uname -s) == "Linux" -a $(uname -n) == "ubuntu-studio" ] # Test if is running in Linux Ubuntu Studio and root
+if [ "$(whoami)" = "root" -a "$(uname -s)" = "Linux" -a "$(uname -n)" = "ubuntu-studio" ] # Test if is running in Linux Ubuntu Studio and root
 	then
 	
 
 	if `zenity --question --title="Install Unity" --text="Do you want to install the Unity desktop?"`
-		then
-			install_unity=true
-		else
-			install_unity=false
+		then	install_unity=true
+		else	install_unity=false
 	fi
 
 
 	if `zenity --question --title="Configure Unity greeter" --text="Do you want to use the unity greeter instead of the ubuntu studio one"`
-		then
-			install_unity_greeter=true
-		else
-			install_unity_greeter=false
-	fi
-
-	if `zenity --question --title="Install GNOME" --text="Do you want to install the GNOME desktop?"`
-		then
-			install_gnome=true
-		else
-			install_gnome=false
+		then	install_unity_greeter=true
+		else	install_unity_greeter=false
 	fi
 
 	if `zenity --question --title="Install GNOME" --text="Do you want to install the GNOME desktop?"`
@@ -71,8 +60,7 @@ if  [ $(whoami) == "root" -a $(uname -s) == "Linux" -a $(uname -n) == "ubuntu-st
 
 	#this could be changed by "software-properties-gtk --open-tab=1"
 	if `/usr/bin/python /usr/bin/software-properties-gtk --open-tab=1`
-		then
-			echo "Done"
+		then	echo "Done"
 		else
 			echo "not successfull"
 			echo "trriying it other way"
@@ -87,7 +75,7 @@ if  [ $(whoami) == "root" -a $(uname -s) == "Linux" -a $(uname -n) == "ubuntu-st
 	#	gnome
 	#	gnome-shell
 
-	if [ $install_unity == true ]
+	if [ $install_unity = true ]
 		then
 			apt-get install -y unity #instalar  unity
 			apt-get install -y unity-greeter #instala el greeter de unity
@@ -95,7 +83,7 @@ if  [ $(whoami) == "root" -a $(uname -s) == "Linux" -a $(uname -n) == "ubuntu-st
 			unity-greeter
 	fi
 	
-	if [ $install_gnome == true ]
+	if [ $install_gnome = true ]
 		then
 			zenity   --warning --text=" Seleccione Lightdm si se le pide!!! "
 			apt-get install gnome-session-flashback
@@ -126,9 +114,8 @@ if  [ $(whoami) == "root" -a $(uname -s) == "Linux" -a $(uname -n) == "ubuntu-st
 			fi
 	fi
 
-	if [ $install_unity_greeter == true ]
-		then
-			# copia archivo de configuracion necesario para el funcionamiento de unity-greeter, NECESARIO!!
+	if [ $install_unity_greeter = true ]
+		then	# copia archivo de configuracion necesario para el funcionamiento de unity-greeter, NECESARIO!!
 			cp unity-greeter.conf /etc/lightdm/unity-greeter.conf
 
 			###	# crea backup del archivo de configuracion de lightdm de ubuntu studio, "just in case" para posible recuperacion
