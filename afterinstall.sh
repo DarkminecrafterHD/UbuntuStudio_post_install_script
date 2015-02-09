@@ -29,8 +29,8 @@ if ! [ $(whoami) == "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-s
 	
 
 	if `zenity --question --title="Install Unity" --text="Do you want to install the Unity desktop?"`
-		then;	install_unity=true
-		else;	install_unity=false
+		then	install_unity=true
+		else	install_unity=false
 	fi
 
 
