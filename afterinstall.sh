@@ -1,10 +1,10 @@
 #! /bin/bash
 #
-# $Id: afterinstall.sh 57 2014-12-30 19:22:24 Angel $
+# $Id: afterinstall.sh 59 2015-5-23 13:13 Angel $
 ##
 # Angel's script for automatic installation of Gnome and Unity desktots and others in Ubuntu Studio 14.04.1 LTS
 #
-#v(b.2.01)
+# $version: b.2.04
 #
 
 #
@@ -42,6 +42,9 @@ if ! [ $(whoami) == "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-s
 	if `zenity --question --title="Install GNOME" --text="Do you want to install the GNOME desktop?"`
 		then	install_gnome=true
 		else	install_gnome=false
+	if `zenity --question --title="Install NTFS support" --text="Do you want to install ntfs-3g and ntfs-config packages?"`
+		then	install_ntfs=true
+		else	install_ntfs=false
 	fi
 
 
@@ -68,7 +71,7 @@ if ! [ $(whoami) == "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-s
 			software-properties-gtk --open-tab=1
 	fi
 
-		# ORDEN DE INSTALACION
+	##### ORDEN DE INSTALACION
 	#	unity
 	#	unity-greeter
 	#	ubuntu-desktop
@@ -92,27 +95,34 @@ if ! [ $(whoami) == "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-s
 				### apt-get install gnome-shell
 				### apt-get install gnome-shell-extensions
 
-			#instalacion avanzada de gnome
-			if `zenity --question --text="Instlar Repositorios especificos de Gnome 3/ GNOME Shell?\nNo recomendado, funciona igualmente."`
-				then
-					### add-apt-repository ppa:ricotz/testing -y
-					### add-apt-repository ppa:gnome3-team/gnome3 -y
-					### add-apt-repository ppa:gnome3-team/gnome3-staging -y
-
-					add-apt-repository "deb http://ppa.launchpad.net/gnome3-team/gnome3/ubuntu trusty main"
-					add-apt-repository "deb-src http://ppa.launchpad.net/gnome3-team/gnome3/ubuntu trusty main"
-					apt-get update
-					apt-get install -y gnome
-					apt-get install -y gnome-shell
-					apt-get install -y gnome-shell-extensions
-					apt-get install -y gnome-tweak-tool
-				else
-					apt-get update
-					apt-get install -y gnome
-					apt-get install -y gnome-shell
-					apt-get install -y gnome-shell-extensions
-					apt-get install gnome-tweak-tool -y
-			fi
+						# Deleted feature (no recomended to use, if you do that, is at your own risk)
+						#	#instalacion avanzada de gnome
+						#	if `zenity --question --text="Instlar Repositorios especificos de Gnome 3/ GNOME Shell?\nNo recomendado, funciona igualmente."`
+						#		then
+						#			### add-apt-repository ppa:ricotz/testing -y
+						#			### add-apt-repository ppa:gnome3-team/gnome3 -y
+						#			### add-apt-repository ppa:gnome3-team/gnome3-staging -y
+						#
+						#			add-apt-repository "deb http://ppa.launchpad.net/gnome3-team/gnome3/ubuntu trusty main"
+						#			add-apt-repository "deb-src http://ppa.launchpad.net/gnome3-team/gnome3/ubuntu trusty main"
+						#			apt-get update
+						#			apt-get install -y gnome
+						#			apt-get install -y gnome-shell
+						#			apt-get install -y gnome-shell-extensions
+						#			apt-get install -y gnome-tweak-tool
+						#		else
+						#			apt-get update
+						#			apt-get install -y gnome
+						#			apt-get install -y gnome-shell
+						#			apt-get install -y gnome-shell-extensions
+						#			apt-get install gnome-tweak-tool -y
+						#	fi
+							
+				apt-get update
+				apt-get install -y gnome
+				apt-get install -y gnome-shell
+				apt-get install -y gnome-shell-extensions
+				apt-get install gnome-tweak-tool -y
 	fi
 
 	if [ $install_unity_greeter == true ]
@@ -120,16 +130,11 @@ if ! [ $(whoami) == "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-s
 			# copia archivo de configuracion necesario para el funcionamiento de unity-greeter, NECESARIO!!
 			cp unity-greeter.conf /etc/lightdm/unity-greeter.conf
 
-			###	# crea backup del archivo de configuracion de lightdm de ubuntu studio, "just in case" para posible recuperacion
-			### cp /etc/lightdm/lightdm.conf.d/10-ubuntustudio.conf /etc/lightdm/lightdm.conf.d/10-ubuntustudio.conf.bak
-			### 
-
 			cp -b 10-ubuntustudio.conf /etc/lightdm/lightdm.conf.d/10-ubuntustudio.conf #copia archivo de configuracion nuevo y crea backup, lo cual hace inecesario el anterior comando
 	fi
 
 	
 	# Ask to install Ubuntu-tweak
-
 	if `zenity --question --text="Instlar Ubuntu Tweak"`
 		then 
 			add-apt-repository ppa:tualatrix/ppa -y # añadir repositorio de ubuntu-tweak
@@ -140,7 +145,6 @@ if ! [ $(whoami) == "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-s
 
 
 	# Ask to install Unity-tweak-tool
-
 	if `zenity --question --text="Instlar Unity Tweak Tool"`
 		then
 			apt-get install -y unity-tweak-tool # Instala unity-tweak-tool
@@ -149,7 +153,6 @@ if ! [ $(whoami) == "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-s
 
 
 	# Ask to install Grub Customizer
-
 	if `zenity --question --text="Instlar Grub Customizer? \n (editor del cargador de arranque)"`
 		then
 			#Añadir los repositorios con el comando:
@@ -162,8 +165,7 @@ if ! [ $(whoami) == "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-s
 
 
 
-		# Instalacion de Skype
-
+	# Instalacion de Skype
 	if `zenity --question --text="Instlar Skype"`
 		then
 			dpkg --add-architecture i386 #añade arquitectura
@@ -173,22 +175,12 @@ if ! [ $(whoami) == "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-s
 
 
 
-	###
-	###	# Descarga en local e instalacion de Google Chrome
-	###wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb # Descarga archivo
-	### dpkg -i google-chrome-stable_current_amd64.deb # Attemp tp install
-	### apt-get install -f # Encuentra dependencias rotas y las arregla
-	### dpkg -i google-chrome-stable_current_amd64.deb # Finaliza la instalacion de  google chrome
-	### rm -f google-chrome-stable_current_amd64.deb # Borrado del paquete ya instalado
-	###
-
-		# Descarga en tmp e instalacion de Google Chrome
-
+	# Descarga en tmp e instalacion de Google Chrome
 	if `zenity --question --text="Instlar Google Chrome"`
 		then
 			wget -O /tmp/google-chrome-stable_current_amd64.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb # Descarga archivo
 			dpkg -i /tmp/google-chrome-stable_current_amd64.deb  -y # Attemp to install
-			apt-get install -f -y # Encuentra dependencias rotas y las instala
+			apt-get install -f –fix-missing -y # Encuentra dependencias rotas y las instala
 			dpkg -i /tmp/google-chrome-stable_current_amd64.deb  -y # Finaliza la instalacion de  google chrome
 
 	fi
@@ -209,7 +201,6 @@ if ! [ $(whoami) == "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-s
 
 
 	# Descarga en tmp e instalacion de Steam
-
 	if `zenity --question --text="Instlar Steam"`
 		then
 			wget -O /tmp/steam.deb http://media.steampowered.com/client/installer/steam.deb # Descarga archivo
@@ -222,7 +213,6 @@ if ! [ $(whoami) == "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-s
 
 
 	# Instalar controladores privativos
-
 	if `zenity --question --text="Instlar Controladores privativos automaticamente?"`
 		then
 			ubuntu-drivers autoinstall
@@ -231,17 +221,20 @@ if ! [ $(whoami) == "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-s
 
 
 	#Proceder a instalar complementos de NTFS
-	apt-get install -y ntfs-3g ntfs-config
+	if [ $install_ntfs == true ]
+		then
+			apt-get install -y ntfs-3g ntfs-config
+	fi
 
 
-
+	#Finished Instalation
 	zenity --info --text="Instalacion concluida"
 	
 	else
 		if [ $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-studio"]
 			then
 				echo " _-====================================================-_ "
-				echo " | This script was made to work only with ubuntu studio | "
+				echo " | This script was made to work only with Ubuntu Studio | "
 				echo " \======================================================/ "
 		fi
 		if ! [ $(whoami) == "root" ]
