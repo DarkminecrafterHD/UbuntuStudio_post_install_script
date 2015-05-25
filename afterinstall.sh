@@ -1,6 +1,10 @@
 #! /bin/bash
 #
+<<<<<<< HEAD
 # $Id: afterinstall.sh 59 2015-5-23 13:13 Angel $
+=======
+# $Id: afterinstall.sh 66 2015-14-09 16:02:59 Angel $
+>>>>>>> origin/master
 ##
 # Angel's script for automatic installation of Gnome and Unity desktots and others in Ubuntu Studio 14.04.1 LTS
 #
@@ -8,7 +12,7 @@
 #
 
 #
-# Copyright (C) 20014 Angel Garcia
+# Copyright (C) 2014-2015 Angel Garcia
 #
 # This file is a script to install Gnome, Unity and some .deb packages
 # in Ubuntu Studio 14.04.1 LTS This file is free software;
@@ -24,13 +28,13 @@
 # "###" means parts of code disabled by default becase unused or other reasons
 #
 
-if ! [ $(whoami) == "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-studio"] # Test if is running in Linux Ubuntu Studio and root
+if [ "$(whoami)" = "root" -a "$(uname -s)" = "Linux" -a "$(uname -n)" = "ubuntu-studio" ] # Test if is running in Linux Ubuntu Studio and root
 	then
 	
 
 	if `zenity --question --title="Install Unity" --text="Do you want to install the Unity desktop?"`
-		then;	install_unity=true
-		else;	install_unity=false
+		then	install_unity=true
+		else	install_unity=false
 	fi
 
 
@@ -63,8 +67,7 @@ if ! [ $(whoami) == "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-s
 
 	#this could be changed by "software-properties-gtk --open-tab=1"
 	if `/usr/bin/python /usr/bin/software-properties-gtk --open-tab=1`
-		then
-			echo "Done"
+		then	echo "Done"
 		else
 			echo "not successfull"
 			echo "trriying it other way"
@@ -79,7 +82,7 @@ if ! [ $(whoami) == "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-s
 	#	gnome
 	#	gnome-shell
 
-	if [ $install_unity == true ]
+	if [ $install_unity = true ]
 		then
 			apt-get install -y unity #instalar  unity
 			apt-get install -y unity-greeter #instala el greeter de unity
@@ -87,7 +90,7 @@ if ! [ $(whoami) == "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-s
 			unity-greeter
 	fi
 	
-	if [ $install_gnome == true ]
+	if [ $install_gnome = true ]
 		then
 			zenity   --warning --text=" Seleccione Lightdm si se le pide!!! "
 			apt-get install gnome-session-flashback
@@ -125,9 +128,8 @@ if ! [ $(whoami) == "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-s
 				apt-get install gnome-tweak-tool -y
 	fi
 
-	if [ $install_unity_greeter == true ]
-		then
-			# copia archivo de configuracion necesario para el funcionamiento de unity-greeter, NECESARIO!!
+	if [ $install_unity_greeter = true ]
+		then	# copia archivo de configuracion necesario para el funcionamiento de unity-greeter, NECESARIO!!
 			cp unity-greeter.conf /etc/lightdm/unity-greeter.conf
 
 			cp -b 10-ubuntustudio.conf /etc/lightdm/lightdm.conf.d/10-ubuntustudio.conf #copia archivo de configuracion nuevo y crea backup, lo cual hace inecesario el anterior comando
@@ -231,15 +233,17 @@ if ! [ $(whoami) == "root" -a $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-s
 	zenity --info --text="Instalacion concluida"
 	
 	else
-		if [ $(uname -n) != "Linux" -a $(uname -r) != "ubuntu-studio"]
+		if [ $(uname -s) != "Linux" -a $(uname -n) != "ubuntu-studio" ]
 			then
 				echo " _-====================================================-_ "
 				echo " | This script was made to work only with Ubuntu Studio | "
 				echo " \======================================================/ "
-		fi
-		if ! [ $(whoami) == "root" ]
-			then
-				echo "You should run it as root"
-				sudo 'sh afterinstall.sh'
+			else
+			
+				if  [ $(whoami) != "root" ]
+					then
+						echo "You should run it as root"
+						sudo 'sh afterinstall.sh'
+				fi
 		fi
 fi
